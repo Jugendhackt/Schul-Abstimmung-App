@@ -1,6 +1,6 @@
 <?php
 
-	require("includes/global.inc.php");
+	require("./includes/global.inc.php");
 	$con = db_connect();
 	
 	$user = 2;
