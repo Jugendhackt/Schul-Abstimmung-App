@@ -12,8 +12,25 @@
 		return $mysqli;
 	}
 	
-	function userinfo($mysqli) {
-		#$query = $mysqli->query();
+	function userinfo($mysqli, $user) {
+		$query = $mysqli->query("SELECT * FROM people WHERE id = '" . $mysqli->real_escape_string($user) . "'");
+		if ($query->num_rows == 1) {
+			return $query->fetch_assoc();
+		} else {
+			return false;
+		}
 	}
+	
+	function surveyinfo($mysqli, $survey) {
+		$query = $mysqli->query("SELECT * FROM surveys WHERE id = '" . $mysqli->real_escape_string($survey) . "'");
+		if ($query->num_rows == 1) {
+			return $query->fetch_assoc();
+		} else {
+			return false;
+		}
+	}
+	
+	$user = 2;
+	$userinfo = userinfo();
 
 ?>
