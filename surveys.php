@@ -11,15 +11,13 @@
 	
 	if (isset($_GET["end"])) {
 		$sid = $con->real_escape_string($_GET["end"]);
-		$query = $con->query("UPDATE surveys SET status = 'finished' WHERE id = '" . $sid . "'");
-		header("Location: ./surveys.php");
+		$query = $con->query("UPDATE surveys SET status = 'finished' WHERE id = '" . $sid . "' AND school = '" . $userinfo["school"] . "'");
+		@header("Location: ./surveys.php");
 	}
 	
 	?>
 		<div class="jumbotron p-2">
-			<div class="btn-group-vertical float-right pull-right">
-				<button type="button" class="btn btn-success">Hinzufügen</button>
-			</div>
+			<a class="btn btn-success float-right pull-right" href="./add.php">Hinzufügen</a>
 			<h1>Umfragen verwalten</h1>
 		</div>
 	<?php
@@ -28,10 +26,7 @@
 		while ($row = $query->fetch_assoc()) {
 				?>
 					<div class="jumbotron">
-						<div class="btn-group-vertical float-right pull-right">
-							<a class="btn btn-primary" href="./edit.php?id=<?php echo $row["id"]; ?>">Bearbeiten</a>
-							<a class="btn btn-danger" href="./surveys.php?end=<?php echo $row["id"]; ?>">Beenden</a>
-						</div>
+						<a class="btn btn-danger float-right pull-right" href="./surveys.php?end=<?php echo $row["id"]; ?>">Beenden</a>
 						<h1><?php echo $row["title"]; ?></h1>
 						<p><?php 
 							if ($row["status"] == "unpublished") {
