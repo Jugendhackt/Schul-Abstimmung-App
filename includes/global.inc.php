@@ -1,6 +1,7 @@
 <?php
 
 	$settings = require("settings.inc.php");
+	require("template.inc.php");
 	
 	function db_connect() {
 		global $settings;
@@ -30,7 +31,8 @@
 		}
 	}
 	
-	$user = 2;
-	$userinfo = userinfo();
+	$con = db_connect();
+	$userinfo = userinfo($con, 2);
+	$con->close();
 
 ?>
