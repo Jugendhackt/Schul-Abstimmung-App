@@ -33,6 +33,5 @@
 	
 	$con = db_connect();
 	$userinfo = userinfo($con, 2);
-	$con->close();
 
 ?>

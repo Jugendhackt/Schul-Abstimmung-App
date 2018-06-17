@@ -1,7 +1,11 @@
 <?php
 
 	require("./includes/global.inc.php");
-	$con = db_connect();
+	
+	if ($userinfo["position"] == "teacher") {
+		header("Location: ./");
+		die("Keine Berechtigung.");
+	}
 	
 	if (!isset($_GET["id"])) {
 		header("Location: ./");
@@ -14,12 +18,19 @@
 			die("Die aufgerufene Umfrage ist ungültig.");
 		} else {
 			$survey = $survey->fetch_assoc();
+			if (!is_null($row["maxtime"]) && time() > strtotime($survey["maxtime"])) {
+				header("Location: ./");
+				die("Die aufgerufene Umfrage ist bereits beendet.");
+			}
 			if (in_array($userinfo["id"], explode(",", $survey["voted"]))) {
 				header("Location: ./");
 				die("Die aufgerufene Umfrage ist ungültig.");
 			}
 			if (isset($_POST["choise"]) && strlen($survey["option" . $_POST["choise"]]) > 0) {
 				$con->real_escape_string($_POST["choise"]);
+				if (!is_null($survey["maxusers"]) && ($survey["votes1"] + $survey["votes2"] + $survey["votes3"] + $survey["votes4"] + $survey["votes5"] + $survey["votes6"] + 1) >= $survey["maxusers"]) {
+					$con->query("UPDATE surveys SET status = 'finished' WHERE id = '" . $sid . "'") or die($con->error);
+				}
 				$con->query("UPDATE surveys SET votes" . $_POST["choise"] . " = votes" . $_POST["choise"] . " + 1, voted = concat(voted, '" . $userinfo["id"] . ",') WHERE id = '" . $sid . "'");
 				header("Location: ./?voted");
 				die("Vielen Dank! Deine Stimme wurde gewertet!");
@@ -29,7 +40,6 @@
 	
 	head("Abstimmen");
 	navbar();
-
 	?>
 	<div class="jumbotron">
 		<h1><?php echo $survey["title"]; ?></h1>

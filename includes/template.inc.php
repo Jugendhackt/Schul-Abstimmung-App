@@ -6,6 +6,7 @@
 		<html lang="de">
         	<head>
         		<meta charset="utf-8">
+        		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         		<title><?php echo strlen($pagetitle)>0?$pagetitle . " &ndash; ":""; ?>Schulstimme</title>
 				<link href="idee.html" type="html" rel="important"/>
 				<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -16,29 +17,48 @@
 	}
 	
 	function navbar() {
+		global $userinfo;
 		?>
-		<nav class="navbar navbar-light mb-1" style="background-color: #e3f2fd;">
+		<div class="p-1 mb-1" style="background-color: #e3f2fd;">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<a class="navbar-brand" href="#">Navbar</a>
+				<a class="navbar-brand" href="./">
+					<img src="logo.svg" width="30" height="30" class="d-inline-block align-top" alt=""> Schulstimme
+				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNavDropdown">
 					<ul class="navbar-nav mr-auto">
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<a class="dropdown-item" href="./">Home</a>
-								<a class="dropdown-item" href="#">Idee hinzufügen</a>
-								<a class="dropdown-item" href="#">Ergebnisse ansehen</a>
-								<a class="dropdown-item" href="#">Abmelden</a>
-							</div>
-	  
+						<li class="nav-item">
+							<a class="dropdown-item" href="./">Home</a>
+						</li>
+					<?php if ($userinfo["position"] == "studentcouncil") { ?>
+						<li class="nav-item">
+							<a class="dropdown-item" href="./idea.php">Ideen</a>
+						</li>
+						<li class="nav-item">
+							<a class="dropdown-item" href="./surveys.php">Umfragen</a>
+						</li>
+						<li class="nav-item">
+							<a class="dropdown-item" href="./members.php">Mitglieder</a>
+						</li>
+					<?php } else { ?>
+						<li class="nav-item">
+							<a class="dropdown-item" href="./idea.php">Idee hinzufügen</a>
+						</li>
+					<?php } ?>
+						<li class="nav-item">
+							<a class="dropdown-item" href="./results.php">Ergebnisse ansehen</a>
+						</li>						
+					</ul>
+					<ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+						<li class="nav-item">
+							<a class="dropdown-item" href="#">Abmelden</a>
 						</li>
 					</ul>
 				</div>
 			</nav>
-		</nav>
+		</div>
 		<div class="container">
 		<?php
 		return true;
