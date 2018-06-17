@@ -9,26 +9,39 @@
 		die("Keine Berechtigung.");
 	}
 	
+	if (isset($_GET["end"])) {
+		$sid = $con->real_escape_string($_GET["end"]);
+		$query = $con->query("UPDATE surveys SET status = 'finished' WHERE id = '" . $sid . "'");
+		header("Location: ./surveys.php");
+	}
+	
+	?>
+		<div class="jumbotron p-2">
+			<div class="btn-group-vertical float-right pull-right">
+				<button type="button" class="btn btn-success">Hinzufügen</button>
+			</div>
+			<h1>Umfragen verwalten</h1>
+		</div>
+	<?php
 	$query = $con->query("SELECT * FROM surveys WHERE school = '" . $userinfo["school"] . "'");
 	if ($query->num_rows > 0) {
-	
 		while ($row = $query->fetch_assoc()) {
 				?>
 					<div class="jumbotron">
 						<div class="btn-group-vertical float-right pull-right">
-							<button type="button" class="btn btn-primary">Bearbeiten</button>
-							<button type="button" class="btn btn-danger">Beenden</button>
+							<a class="btn btn-primary" href="./edit.php?id=<?php echo $row["id"]; ?>">Bearbeiten</a>
+							<a class="btn btn-danger" href="./surveys.php?end=<?php echo $row["id"]; ?>">Beenden</a>
 						</div>
 						<h1><?php echo $row["title"]; ?></h1>
 						<p><?php 
-							if ($status == "unpublished") {
-								"Unveröffentlicht";
-							} elseif ($status == "active") {
-								"Läuft";
-							} if ($status == "finished") {
-								"Beendet";
+							if ($row["status"] == "unpublished") {
+								echo "Unveröffentlicht";
+							} elseif ($row["status"] == "active") {
+								echo "Läuft";
+							} if ($row["status"] == "finished") {
+								echo "Beendet";
 							}
-						?> | <?php echo $row["votes1"] + $row["votes2"] + $row["votes3"] + $row["votes4"] + $row["votes5"] + $row["votes6"]; ?> Teilnehmer*innen | Läuft bis 
+						?> | <?php echo $row["type"]=="public"?"Öffentlich":"Privat"; ?> | <?php echo $row["votes1"] + $row["votes2"] + $row["votes3"] + $row["votes4"] + $row["votes5"] + $row["votes6"]; ?> Teilnehmer*innen | Läuft bis 
 						<?php
 							if (is_null($row["maxusers"]) && is_null($row["maxtime"])) {
 								echo "zum manuellen Beenden";

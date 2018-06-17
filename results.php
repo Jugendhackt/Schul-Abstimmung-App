@@ -68,6 +68,7 @@
 						<div class="progress-bar" role="progressbar" style="width: <?php echo round(($row["votes6"] / $votes) * 100, 1); ?>%;"></div>
 					</div>
 				<?php } ?>
+			</div>
 	<?php
 		}
 		
